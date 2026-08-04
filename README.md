@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Fake News Detection Using Machine Learning (MVP Architecture)
 
 A web application that classifies news articles as **Real** or **Fake** using Machine Learning and Natural Language Processing (NLP). Designed cleanly using the Model-View-Presenter (MVP) pattern.
@@ -28,3 +29,6 @@ fake-news-detection/
 
 ## Setup Instructions
 *(Detailed implementation coming in upcoming steps)*
+=======
+# Fake_News_Detection
+>>>>>>> 53b8500972bd8679c1dfe3a066f7b87e79a956fb
