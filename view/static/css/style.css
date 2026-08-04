@@ -1,0 +1,24 @@
+/*
+  style.css
+  =========
+  Responsibility:
+  - Custom visual styling for the Fake News Detection application.
+  - Color palettes, modern typography, glassmorphism cards, badges, and animations.
+
+  TODO:
+  - Add dark mode / accent color variables.
+  - Custom spinner keyframes.
+  - Result card styling.
+*/
+
+:root {
+    --primary-color: #4a90e2;
+    --success-color: #2ecc71;
+    --danger-color: #e74c3c;
+    --bg-dark: #121826;
+    --card-bg: #1b2436;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
