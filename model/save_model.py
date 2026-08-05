@@ -12,7 +12,9 @@ from typing import Any
 import joblib
 
 # Ensure project root directory is in sys.path when executed directly
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+_ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if _ROOT_DIR not in sys.path:
+    sys.path.append(_ROOT_DIR)
 
 from utils.logger import get_logger
 from utils.helper import ensure_directory_exists, verify_file_exists
@@ -60,11 +62,13 @@ def load_artifact(file_path: str) -> Any:
 
     Raises:
         FileNotFoundError: If file does not exist.
-        IOError: If deserialization fails.
+        IOError: If deserialization fails or artifact is incompatible.
     """
     if not verify_file_exists(file_path):
         logger.error(f"Artifact file not found: '{file_path}'")
-        raise FileNotFoundError(f"Artifact file not found at '{file_path}'")
+        raise FileNotFoundError(
+            f"Artifact file missing at '{file_path}'. Please retrain the model using 'python -m model.train_model'."
+        )
 
     try:
         obj = joblib.load(file_path)
@@ -72,7 +76,10 @@ def load_artifact(file_path: str) -> Any:
         return obj
     except Exception as e:
         logger.error(f"Failed to load artifact from '{file_path}': {e}", exc_info=True)
-        raise IOError(f"Failed to load artifact from {file_path}") from e
+        raise IOError(
+            f"Failed to load artifact from '{file_path}'. The model file may be corrupt or incompatible with the current environment. Please retrain using 'python -m model.train_model'."
+        ) from e
+
 
 
 def save_model(model: Any, file_path: str = "model/model.pkl") -> None:

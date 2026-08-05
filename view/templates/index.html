@@ -1,26 +1,93 @@
 {% extends "base.html" %}
 
-{% block title %}Fake News Detector - Home{% endblock %}
+{% block title %}Fake News Detector - Verify News Article{% endblock %}
 
 {% block content %}
-<!--
-  index.html
-  ==========
-  Responsibility:
-  - Main input view featuring the news article submission form.
-  - Displays textarea input, clear/submit buttons, and loading spinner animation container.
-
-  TODO:
-  - Implement form submission target (/predict).
-  - Implement text area with placeholder.
-  - Implement dynamic JS loading spinner wrapper.
--->
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <h1 class="text-center mb-4">Fake News Detection</h1>
-        <p class="text-muted text-center">Paste a news article below to classify it as Real or Fake.</p>
+<div class="row justify-content-center fade-in">
+    <div class="col-lg-9 col-xl-8">
         
-        <!-- TODO: Add article input form -->
+        <!-- Header Banner Section -->
+        <div class="text-center mb-4">
+            <div class="title-badge mb-2">
+                <i class="bi bi-cpu-fill"></i> AI-POWERED TEXT VERIFICATION
+            </div>
+            <h1 class="app-title display-5 mb-2">Fake News Detection</h1>
+            <p class="text-muted lead fs-6">
+                Paste any news article headline or text excerpt below. Our Machine Learning model will analyze TF-IDF feature representations to determine whether the article is <strong>REAL</strong> or <strong>FAKE</strong>.
+            </p>
+        </div>
+
+        <!-- Server Error Banner -->
+        {% if error %}
+        <div class="alert alert-danger alert-dismissible fade show rounded-3 shadow-sm mb-4" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-exclamation-octagon-fill fs-4 me-3 text-danger"></i>
+                <div>
+                    <strong>Validation Error:</strong> {{ error }}
+                </div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+
+        <!-- Form Card Container -->
+        <div class="card custom-card p-4 p-md-5" id="form-card">
+            <form action="{{ url_for('presenter.predict') }}" method="POST" id="news-form" novalidate>
+                
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <label for="news_text" class="form-label fw-bold mb-0">
+                        <i class="bi bi-journal-text text-primary me-1"></i> Article Text Content
+                    </label>
+                    <span class="text-muted small" id="char-counter">0 characters</span>
+                </div>
+
+                <!-- Textarea Input -->
+                <textarea 
+                    class="form-control custom-textarea mb-3" 
+                    id="news_text" 
+                    name="news_text" 
+                    rows="8" 
+                    placeholder="Paste the news article text here (e.g. headline, paragraph, or complete story)...">{{ news_text or '' }}</textarea>
+
+                <!-- Client Validation Message -->
+                <div class="alert alert-warning py-2 px-3 small rounded-3 d-none mb-3" id="validation-msg">
+                    <i class="bi bi-exclamation-circle-fill me-1"></i> Article text cannot be empty or contain only spaces.
+                </div>
+
+                <!-- Quick Sample Test Articles -->
+                <div class="mb-4">
+                    <span class="text-muted small me-2"><i class="bi bi-lightbulb me-1"></i>Try a sample:</span>
+                    <span class="badge bg-light text-dark border me-1 sample-pill" data-sample="The Reserve Bank of India today held its monetary policy meeting and announced no changes to the benchmark repo rate, maintaining an accommodative stance to support economic growth momentum.">
+                        <i class="bi bi-check2-circle text-success me-1"></i>Real Sample
+                    </span>
+                    <span class="badge bg-light text-dark border sample-pill" data-sample="BREAKING: Secret Alien spacecraft spotted landing in downtown New York, official government sources confirm complete shutdown of city center.">
+                        <i class="bi bi-x-circle text-danger me-1"></i>Fake Sample
+                    </span>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-flex flex-column flex-sm-row gap-3 pt-2">
+                    <button type="submit" class="btn btn-primary btn-lg flex-grow-1" id="detect-btn" disabled>
+                        <i class="bi bi-shield-check me-2"></i>Detect News
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary btn-lg" id="clear-btn">
+                        <i class="bi bi-x-circle me-2"></i>Clear
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Animated Loading Spinner Overlay -->
+        <div class="card custom-card p-5 text-center d-none" id="loading-spinner">
+            <div class="spinner-container">
+                <div class="spinner-border text-primary mb-3" style="width: 3.5rem; height: 3.5rem;" role="status">
+                    <span class="visually-hidden">Analyzing article...</span>
+                </div>
+                <h4 class="fw-bold mb-2">Analyzing Article Content</h4>
+                <p class="text-muted mb-0">Extracting TF-IDF text features & evaluating model probabilities...</p>
+            </div>
+        </div>
+
     </div>
 </div>
 {% endblock %}

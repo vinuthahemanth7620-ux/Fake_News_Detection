@@ -18,9 +18,13 @@ import sys
 from typing import Tuple, Dict, Any
 
 # Ensure project root directory is in sys.path when executed directly
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+_ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if _ROOT_DIR not in sys.path:
+    sys.path.append(_ROOT_DIR)
 
 import pandas as pd
+import sklearn
+import joblib
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
@@ -41,6 +45,22 @@ from model.save_model import (
 )
 
 logger = get_logger(__name__)
+
+
+def log_environment_versions() -> None:
+    """
+    Logs the versions of core packages (Python, scikit-learn, joblib, pandas)
+    used during model training for reproducibility and debugging.
+    """
+    logger.info("==========================================")
+    logger.info("       ENVIRONMENT & PACKAGE VERSIONS     ")
+    logger.info("==========================================")
+    logger.info(f"Python version:       {sys.version.split()[0]}")
+    logger.info(f"scikit-learn version: {sklearn.__version__}")
+    logger.info(f"joblib version:       {joblib.__version__}")
+    logger.info(f"pandas version:       {pd.__version__}")
+    logger.info("==========================================")
+
 
 
 def load_clean_dataset(file_path: str = "dataset/cleaned_news.csv") -> pd.DataFrame:
@@ -266,6 +286,7 @@ def run_training_pipeline(
             Trained model, fitted vectorizer, and evaluation metrics dictionary.
     """
     logger.info("========== Starting ML Model Training Pipeline ==========")
+    log_environment_versions()
 
     # 1. Load dataset
     df = load_clean_dataset(dataset_path)

@@ -3,22 +3,67 @@
 {% block title %}Fake News Detector - Prediction Result{% endblock %}
 
 {% block content %}
-<!--
-  result.html
-  ===========
-  Responsibility:
-  - Displays classification output (Real or Fake) with color-coded status badges and confidence meters.
-  - Displays submitted article excerpt and return button.
+<div class="row justify-content-center fade-in">
+    <div class="col-lg-8 col-xl-7">
+        
+        <div class="card custom-card p-4 p-md-5 text-center">
+            
+            <div class="text-muted small text-uppercase fw-bold mb-3 tracking-wider">
+                <i class="bi bi-bar-chart-line me-1"></i> Analysis Classification Result
+            </div>
 
-  TODO:
-  - Implement badge styling based on prediction (e.g. green for Real, red for Fake).
-  - Display probability confidence progress bar.
-  - Button to test another news article.
--->
-<div class="row justify-content-center">
-    <div class="col-md-8 text-center">
-        <h2>Classification Result</h2>
-        <!-- TODO: Dynamic result badge and progress bar -->
+            <!-- Prediction Badge -->
+            <div class="mb-4">
+                {% if result.is_real %}
+                <div class="result-badge result-badge-real">
+                    <i class="bi bi-check-circle-fill"></i> REAL NEWS
+                </div>
+                {% else %}
+                <div class="result-badge result-badge-fake">
+                    <i class="bi bi-exclamation-triangle-fill"></i> FAKE NEWS
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Confidence Progress Meter -->
+            <div class="card bg-light border-0 p-4 rounded-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="fw-semibold text-secondary">Model Classification Confidence</span>
+                    <span class="fs-4 fw-bold {% if result.is_real %}text-success{% else %}text-danger{% endif %}">
+                        {{ result.confidence }}%
+                    </span>
+                </div>
+                <div class="confidence-progress">
+                    <div 
+                        class="progress-bar {% if result.is_real %}progress-bar-real{% else %}progress-bar-fake{% endif %}" 
+                        role="progressbar" 
+                        style="width: {{ result.confidence }}%;" 
+                        aria-valuenow="{{ result.confidence }}" 
+                        aria-valuemin="0" 
+                        aria-valuemax="100">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Original Article Excerpt Display -->
+            <div class="text-start mb-4">
+                <label class="form-label fw-bold text-secondary">
+                    <i class="bi bi-file-text me-1"></i> Submitted Article Text Excerpt
+                </label>
+                <div class="excerpt-box p-3">
+                    "{{ result.original_text }}"
+                </div>
+            </div>
+
+            <!-- Action Button Row -->
+            <div class="d-grid gap-2 d-sm-flex justify-content-center pt-2">
+                <a href="{{ url_for('presenter.index') }}" class="btn btn-primary btn-lg px-4">
+                    <i class="bi bi-arrow-counterclockwise me-2"></i>Analyze Another News
+                </a>
+            </div>
+
+        </div>
+
     </div>
 </div>
 {% endblock %}

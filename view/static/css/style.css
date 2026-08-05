@@ -1,24 +1,246 @@
 /*
   style.css
   =========
-  Responsibility:
-  - Custom visual styling for the Fake News Detection application.
-  - Color palettes, modern typography, glassmorphism cards, badges, and animations.
-
-  TODO:
-  - Add dark mode / accent color variables.
-  - Custom spinner keyframes.
-  - Result card styling.
+  Custom Visual Design System for Fake News Detection Application
+  Theme Colors:
+  - Primary: #2563EB (Royal Blue)
+  - Secondary/Background: #F8FAFC (Slate Light)
+  - Accent/Success: #10B981 (Emerald Green)
+  - Danger/Fake: #EF4444 (Coral Red)
+  - Dark/Text: #1E293B (Slate Dark)
 */
 
 :root {
-    --primary-color: #4a90e2;
-    --success-color: #2ecc71;
-    --danger-color: #e74c3c;
-    --bg-dark: #121826;
-    --card-bg: #1b2436;
+    --primary-color: #2563EB;
+    --primary-hover: #1D4ED8;
+    --secondary-bg: #F8FAFC;
+    --accent-success: #10B981;
+    --accent-danger: #EF4444;
+    --text-main: #1E293B;
+    --text-muted: #64748B;
+    --card-bg: #FFFFFF;
+    --card-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+    --hover-shadow: 0 20px 30px -10px rgba(37, 99, 235, 0.15);
+    --border-radius: 1rem;
 }
 
 body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--secondary-bg);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* Typography & Badges */
+.app-title {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text-main);
+}
+
+.title-badge {
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 2rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+/* Card Design */
+.custom-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.custom-card:hover {
+    box-shadow: var(--hover-shadow);
+}
+
+/* Textarea & Input Controls */
+.custom-textarea {
+    border: 2px solid #E2E8F0;
+    border-radius: 0.75rem;
+    padding: 1.1rem;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-main);
+    background-color: #FFFFFF;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    resize: vertical;
+}
+
+.custom-textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+    outline: none;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    font-weight: 600;
+    border-radius: 0.65rem;
+    padding: 0.75rem 1.75rem;
+    transition: all 0.2s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.btn-primary:disabled {
+    background-color: #94A3B8;
+    border-color: #94A3B8;
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.btn-outline-secondary {
+    border-color: #CBD5E1;
+    color: var(--text-muted);
+    font-weight: 600;
+    border-radius: 0.65rem;
+    padding: 0.75rem 1.5rem;
+    transition: all 0.2s ease;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #F1F5F9;
+    color: var(--text-main);
+    border-color: #94A3B8;
+}
+
+/* Result Badges */
+.result-badge {
+    font-size: 1.75rem;
+    font-weight: 800;
+    padding: 0.75rem 2rem;
+    border-radius: 2rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    letter-spacing: 0.05em;
+    animation: scaleIn 0.4s ease-out;
+}
+
+.result-badge-real {
+    background-color: rgba(16, 185, 129, 0.12);
+    color: var(--accent-success);
+    border: 2px solid var(--accent-success);
+}
+
+.result-badge-fake {
+    background-color: rgba(239, 68, 68, 0.12);
+    color: var(--accent-danger);
+    border: 2px solid var(--accent-danger);
+}
+
+/* Meter & Progress Bar */
+.confidence-progress {
+    height: 1.25rem;
+    border-radius: 1rem;
+    background-color: #E2E8F0;
+    overflow: hidden;
+}
+
+.progress-bar-real {
+    background: linear-gradient(90deg, #10B981, #059669);
+    transition: width 1s ease-in-out;
+}
+
+.progress-bar-fake {
+    background: linear-gradient(90deg, #EF4444, #DC2626);
+    transition: width 1s ease-in-out;
+}
+
+/* Excerpt Box */
+.excerpt-box {
+    background-color: #F1F5F9;
+    border-left: 4px solid var(--primary-color);
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-main);
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+/* Navbar */
+.navbar-brand {
+    font-weight: 700;
+    color: var(--primary-color) !important;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nav-link {
+    font-weight: 500;
+    color: var(--text-muted) !important;
+    transition: color 0.2s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--primary-color) !important;
+}
+
+/* Footer */
+footer {
+    background-color: #FFFFFF;
+    border-top: 1px solid #E2E8F0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* Quick Sample Pills */
+.sample-pill {
+    font-size: 0.8rem;
+    font-weight: 500;
+    border-radius: 1rem;
+    padding: 0.25rem 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* Animations */
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* Spinner Overlay */
+.spinner-container {
+    padding: 2.5rem 1rem;
 }

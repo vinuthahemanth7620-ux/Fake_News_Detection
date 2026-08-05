@@ -42,7 +42,12 @@ def load_model(file_path: str = "model/model.pkl") -> Any:
     global _LOADED_MODEL
     if _LOADED_MODEL is None or file_path != "model/model.pkl":
         logger.info(f"Loading model artifact from '{file_path}'...")
-        _LOADED_MODEL = load_artifact(file_path)
+        try:
+            _LOADED_MODEL = load_artifact(file_path)
+        except Exception as e:
+            msg = f"Model file error for '{file_path}': {e}"
+            logger.error(msg)
+            raise RuntimeError(msg) from e
     return _LOADED_MODEL
 
 
@@ -59,8 +64,14 @@ def load_vectorizer(file_path: str = "model/vectorizer.pkl") -> Any:
     global _LOADED_VECTORIZER
     if _LOADED_VECTORIZER is None or file_path != "model/vectorizer.pkl":
         logger.info(f"Loading vectorizer artifact from '{file_path}'...")
-        _LOADED_VECTORIZER = load_artifact(file_path)
+        try:
+            _LOADED_VECTORIZER = load_artifact(file_path)
+        except Exception as e:
+            msg = f"Vectorizer file error for '{file_path}': {e}"
+            logger.error(msg)
+            raise RuntimeError(msg) from e
     return _LOADED_VECTORIZER
+
 
 
 def preprocess_input(text: str) -> str:
@@ -134,13 +145,23 @@ def get_prediction_confidence(
         model = load_model()
 
     logger.info("Computing prediction probabilities with model.predict_proba()...")
-    probabilities = model.predict_proba(vectorized_text)[0]
-    predicted_label = int(model.predict(vectorized_text)[0])
+    try:
+        probabilities = model.predict_proba(vectorized_text)[0]
+        predicted_label = int(model.predict(vectorized_text)[0])
+    except AttributeError as e:
+        msg = f"Incompatible model estimator ({e}). Please retrain the model by running 'python -m model.train_model'."
+        logger.error(msg)
+        raise RuntimeError(msg) from e
+    except Exception as e:
+        msg = f"Prediction failed due to model error: {e}. Please retrain the model using 'python -m model.train_model'."
+        logger.error(msg)
+        raise RuntimeError(msg) from e
 
     confidence_percentage = round(float(probabilities[predicted_label]) * 100.0, 2)
     logger.info(f"Calculated prediction: label={predicted_label}, confidence={confidence_percentage}%")
 
     return predicted_label, confidence_percentage
+
 
 
 def predict_news(
