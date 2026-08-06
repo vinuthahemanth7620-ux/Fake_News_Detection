@@ -12,6 +12,7 @@ Responsibility:
 import os
 import sys
 from typing import Dict, Any, Tuple, Optional
+import numpy as np
 
 # Ensure project root directory is in sys.path when executed directly
 _ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -144,20 +145,28 @@ def get_prediction_confidence(
     if model is None:
         model = load_model()
 
-    logger.info("Computing prediction probabilities with model.predict_proba()...")
     try:
-        probabilities = model.predict_proba(vectorized_text)[0]
-        predicted_label = int(model.predict(vectorized_text)[0])
-    except AttributeError as e:
-        msg = f"Incompatible model estimator ({e}). Please retrain the model by running 'python -m model.train_model'."
-        logger.error(msg)
-        raise RuntimeError(msg) from e
+        if hasattr(model, "predict_proba"):
+            logger.info("Computing prediction probabilities with model.predict_proba()...")
+            probabilities = model.predict_proba(vectorized_text)[0]
+            predicted_label = int(model.predict(vectorized_text)[0])
+            confidence_percentage = round(float(probabilities[predicted_label]) * 100.0, 2)
+        elif hasattr(model, "decision_function"):
+            logger.info("Computing prediction confidence with model.decision_function() using sigmoid...")
+            predicted_label = int(model.predict(vectorized_text)[0])
+            decision_scores = model.decision_function(vectorized_text)
+            score = float(np.ravel(decision_scores)[0])
+            confidence_val = 1.0 / (1.0 + np.exp(-abs(score)))
+            confidence_percentage = round(float(confidence_val) * 100.0, 2)
+        else:
+            logger.warning("Model implements neither predict_proba nor decision_function. Defaulting confidence to 100.0%.")
+            predicted_label = int(model.predict(vectorized_text)[0])
+            confidence_percentage = 100.0
     except Exception as e:
         msg = f"Prediction failed due to model error: {e}. Please retrain the model using 'python -m model.train_model'."
         logger.error(msg)
         raise RuntimeError(msg) from e
 
-    confidence_percentage = round(float(probabilities[predicted_label]) * 100.0, 2)
     logger.info(f"Calculated prediction: label={predicted_label}, confidence={confidence_percentage}%")
 
     return predicted_label, confidence_percentage

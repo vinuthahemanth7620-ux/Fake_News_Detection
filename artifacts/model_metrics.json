@@ -1,0 +1,154 @@
+{
+    "best_classifier": "LinearSVC (C=1.0)",
+    "best_feature_configuration": {
+        "config_id": "Config_31",
+        "max_features": 20000,
+        "ngram_range": "(1, 2)",
+        "min_df": 5,
+        "max_df": 0.9,
+        "mean_cv_f1": 0.994,
+        "std_cv_f1": 0.0003
+    },
+    "best_test_metrics": {
+        "accuracy": 0.9962,
+        "precision": 0.9958,
+        "recall": 0.9963,
+        "f1_score": 0.996,
+        "confusion_matrix": [
+            [
+                4536,
+                18
+            ],
+            [
+                16,
+                4267
+            ]
+        ]
+    },
+    "top_features": {
+        "top_positive_real_features": [
+            {
+                "feature": "reuter",
+                "weight": 17.6671
+            },
+            {
+                "feature": "said",
+                "weight": 6.1774
+            },
+            {
+                "feature": "washington reuter",
+                "weight": 6.0205
+            },
+            {
+                "feature": "presid donald",
+                "weight": 2.8397
+            },
+            {
+                "feature": "reuter presid",
+                "weight": 2.6926
+            },
+            {
+                "feature": "york reuter",
+                "weight": 2.3599
+            },
+            {
+                "feature": "wednesday",
+                "weight": 2.2505
+            },
+            {
+                "feature": "nov",
+                "weight": 2.1699
+            },
+            {
+                "feature": "tuesday",
+                "weight": 2.0174
+            },
+            {
+                "feature": "washington",
+                "weight": 1.8622
+            },
+            {
+                "feature": "said statement",
+                "weight": 1.7722
+            },
+            {
+                "feature": "presid barack",
+                "weight": 1.7302
+            },
+            {
+                "feature": "thursday",
+                "weight": 1.6562
+            },
+            {
+                "feature": "nov elect",
+                "weight": 1.5744
+            },
+            {
+                "feature": "friday",
+                "weight": 1.5623
+            }
+        ],
+        "top_negative_fake_features": [
+            {
+                "feature": "imag",
+                "weight": -4.515
+            },
+            {
+                "feature": "presid trump",
+                "weight": -2.8808
+            },
+            {
+                "feature": "gop",
+                "weight": -2.7676
+            },
+            {
+                "feature": "rep",
+                "weight": -2.3428
+            },
+            {
+                "feature": "sen",
+                "weight": -2.2849
+            },
+            {
+                "feature": "saidth",
+                "weight": -2.2623
+            },
+            {
+                "feature": "hillari",
+                "weight": -2.1821
+            },
+            {
+                "feature": "mr",
+                "weight": -2.0909
+            },
+            {
+                "feature": "gov",
+                "weight": -1.9748
+            },
+            {
+                "feature": "read",
+                "weight": -1.8605
+            },
+            {
+                "feature": "ap",
+                "weight": -1.8592
+            },
+            {
+                "feature": "entir",
+                "weight": -1.7443
+            },
+            {
+                "feature": "america",
+                "weight": -1.738
+            },
+            {
+                "feature": "wfb",
+                "weight": -1.7155
+            },
+            {
+                "feature": "presid obama",
+                "weight": -1.676
+            }
+        ]
+    }
+}
